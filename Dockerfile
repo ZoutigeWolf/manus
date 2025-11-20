@@ -6,8 +6,6 @@ COPY . .
 
 RUN cargo build --release
 
-RUN ls -l /target/release
-
 FROM debian:bookworm-slim
 
 RUN apt-get update \
