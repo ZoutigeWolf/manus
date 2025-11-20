@@ -24,7 +24,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ secrets.REGISTRY_URL }}/portfolio:latest
+          tags: ${{ secrets.REGISTRY_URL }}/manus:latest
 
       - name: Restart docker container
         uses: JamesIves/fetch-api-data-action@v2
