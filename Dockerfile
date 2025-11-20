@@ -6,6 +6,8 @@ COPY . .
 
 RUN cargo build --release
 
+RUN ls -l /target/release
+
 FROM debian:bookworm-slim
 
 RUN apt-get update \
@@ -19,4 +21,4 @@ COPY --from=builder /target/release/manus .
 
 EXPOSE 3069
 
-CMD ["./manus"]
+ENTRYPOINT ["./manus"]
