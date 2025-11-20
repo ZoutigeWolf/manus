@@ -1,4 +1,36 @@
-name: docker-image.yml
+name: Deploy Docker
+
 on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push to local registry
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ secrets.REGISTRY_URL }}/portfolio:latest
+
+      - name: Restart docker container
+        uses: JamesIves/fetch-api-data-action@v2
+        with:
+          endpoint: ${{ secrets.RESTART_URL }}
+          configuration: |
+            {
+              "method": "POST"
+            }
