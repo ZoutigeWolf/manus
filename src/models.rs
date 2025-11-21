@@ -164,9 +164,10 @@ impl ManusData {
                 event.push(Summary::new(department.name.clone()));
 
                 event.push(Location::new(format!(
-                    "{} - {}",
+                    "{} - {}\n{}",
                     account.me.node_code.clone(),
-                    account.me.node_name.clone()
+                    account.me.node_name.clone(),
+                    account.me.node_address(),
                 )));
 
                 events.push(event);
@@ -174,5 +175,14 @@ impl ManusData {
         }
 
         events
+    }
+}
+
+impl Me {
+    pub fn node_address(&self) -> &str {
+        match self.node_code.as_str() {
+            "0685" => "Houtstraat 30, 3041 JD\nRotterdam, Netherlands",
+            &_ => "",
+        }
     }
 }
