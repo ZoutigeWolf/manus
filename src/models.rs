@@ -1,6 +1,6 @@
 use crate::date;
 use chrono::Utc;
-use ics::properties::{DtEnd, DtStart, Location, Status, Summary};
+use ics::properties::{DtEnd, DtStart, Location, Summary};
 use ics::Event;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -146,7 +146,11 @@ impl ManusData {
     pub fn parse_events(&self, account: &Account) -> Vec<Event<'static>> {
         let mut events = Vec::new();
 
-        for schedule in self.schedule.iter().filter(|&s| !s.entries.is_empty()) {
+        for schedule in self
+            .schedule
+            .iter()
+            .filter(|&s| !s.entries.is_empty() && s.vacation.is_empty())
+        {
             for entry in schedule.entries.iter() {
                 let start = date::parse_datetime(schedule.date, entry.start_time);
                 let end = date::parse_datetime(schedule.date, entry.end_time);
@@ -164,10 +168,6 @@ impl ManusData {
                     account.me.node_code.clone(),
                     account.me.node_name.clone()
                 )));
-
-                if !schedule.vacation.is_empty() {
-                    event.push(Status::new("CANCELLED"))
-                }
 
                 events.push(event);
             }
