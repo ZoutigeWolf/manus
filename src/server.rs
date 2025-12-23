@@ -36,7 +36,7 @@ pub async fn get_calendar_for_user(
 
     let week_start = NaiveDate::from_isoywd_opt(current_year, current_week, Weekday::Mon).unwrap();
 
-    for offset in -4..=4 {
+    for offset in -12..=4 {
         let shifted = week_start + Duration::weeks(offset);
 
         let year = shifted.iso_week().year() as u32;
