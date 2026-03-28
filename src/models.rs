@@ -148,7 +148,7 @@ pub struct Node {
 pub struct ManusData {
     #[serde(rename = "departments")]
     pub departments: HashMap<u32, Department>,
-qqqqqqqqqqqqqqqqq
+
     #[serde(rename = "nodes")]
     pub nodes: HashMap<u32, Node>,
 
@@ -185,8 +185,8 @@ impl ManusData {
 
                 event.push(Location::new(format!(
                     "{} - {}",
-                    schedule.nodes.get(&entry.node_id.parse::<u32>().unwrap()).unwrap().code.clone(),
-                    schedule.nodes.get(&entry.node_id.parse::<u32>().unwrap()).unwrap().name.clone(),
+                    self.nodes.get(&entry.node_id.parse::<u32>().unwrap()).unwrap().code.clone(),
+                    self.nodes.get(&entry.node_id.parse::<u32>().unwrap()).unwrap().name.clone(),
                 )));
 
                 events.push(event);
