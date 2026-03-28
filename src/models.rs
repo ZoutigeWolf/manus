@@ -150,7 +150,7 @@ pub struct ManusData {
     pub departments: HashMap<u32, Department>,
 
     #[serde(rename = "nodes")]
-    pub nodes: HashMap<u32, Node>,
+    pub nodes: HashMap<String, Node>,
 
     #[serde(rename = "hourCodes")]
     pub hour_codes: HashMap<u32, HourCode>,
