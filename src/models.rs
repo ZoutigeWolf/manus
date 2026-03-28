@@ -81,6 +81,9 @@ pub struct Entry {
     #[serde(rename = "id")]
     pub id: u32,
 
+    #[serde(rename = "nodeId")]
+    pub node_id: String,
+
     #[serde(rename = "departmentId")]
     pub department_id: u32,
 
@@ -128,9 +131,26 @@ pub struct Weekday {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct Node {
+    #[serde(rename = "id")]
+    pub id: String,
+
+    #[serde(rename = "code")]
+    pub code: String,
+
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+
+
+#[derive(Debug, Deserialize)]
 pub struct ManusData {
     #[serde(rename = "departments")]
     pub departments: HashMap<u32, Department>,
+
+    #[serde(rename = "nodes")]
+    pub nodes: HashMap<u32, Node>,
 
     #[serde(rename = "hourCodes")]
     pub hour_codes: HashMap<u32, HourCode>,
@@ -165,8 +185,8 @@ impl ManusData {
 
                 event.push(Location::new(format!(
                     "{} - {}",
-                    account.me.node_code.clone(),
-                    account.me.node_name.clone(),
+                    entry.nodes.get(&entry.node_id.parse::<u32>().unwrap()).unwrap().code.clone(),
+                    entry.nodes.get(&entry.node_id.parse::<u32>().unwrap()).unwrap().name.clone(),
                 )));
 
                 events.push(event);
