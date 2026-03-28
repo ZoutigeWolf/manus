@@ -185,8 +185,8 @@ impl ManusData {
 
                 event.push(Location::new(format!(
                     "{} - {}",
-                    self.nodes.get(&entry.node_id.parse::<u32>().unwrap()).unwrap().code.clone(),
-                    self.nodes.get(&entry.node_id.parse::<u32>().unwrap()).unwrap().name.clone(),
+                    self.nodes.get(&entry.node_id.clone()).unwrap().code.clone(),
+                    self.nodes.get(&entry.node_id.clone()).unwrap().name.clone(),
                 )));
 
                 events.push(event);
