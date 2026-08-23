@@ -1,8 +1,8 @@
 use crate::date;
 use chrono::Utc;
-use ics::properties::{DtEnd, DtStart, Location, Summary};
 use ics::Event;
-use serde::Deserialize;
+use ics::properties::{DtEnd, DtStart, Location, Summary};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Debug, Clone)]
@@ -13,7 +13,7 @@ pub struct Account {
     pub me: Me,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Token {
     #[serde(rename = "access_token")]
     pub access_token: String,
@@ -25,7 +25,7 @@ pub struct Token {
     pub token_type: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Me {
     #[serde(rename = "id")]
     pub employee_id: String,
@@ -46,7 +46,7 @@ pub struct Me {
     pub node_name: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct HourCode {
     #[serde(rename = "code")]
     pub code: String,
@@ -61,7 +61,7 @@ pub struct HourCode {
     pub name: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Department {
     #[serde(rename = "code")]
     pub code: String,
@@ -76,7 +76,7 @@ pub struct Department {
     pub name: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Entry {
     #[serde(rename = "id")]
     pub id: u32,
@@ -98,9 +98,12 @@ pub struct Entry {
 
     #[serde(rename = "totalTime")]
     pub total_time: f32,
+
+    #[serde(rename = "notes")]
+    pub notes: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Vacation {
     #[serde(rename = "startTime")]
     pub start_time: u32,
@@ -109,7 +112,7 @@ pub struct Vacation {
     pub end_time: u32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Schedule {
     #[serde(rename = "date")]
     pub date: u32,
@@ -121,7 +124,7 @@ pub struct Schedule {
     pub vacation: Vec<Vacation>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Weekday {
     #[serde(rename = "key")]
     pub key: String,
@@ -130,7 +133,7 @@ pub struct Weekday {
     pub text: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Node {
     #[serde(rename = "id")]
     pub id: String,
@@ -143,8 +146,7 @@ pub struct Node {
 }
 
 
-
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ManusData {
     #[serde(rename = "departments")]
     pub departments: HashMap<u32, Department>,
@@ -195,4 +197,64 @@ impl ManusData {
 
         events
     }
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct Employee {
+    #[serde(rename = "key")]
+    pub id: String,
+
+    #[serde(rename = "text")]
+    pub name: String,
+
+    #[serde(rename = "employeeTypeAbbr")]
+    pub employee_type: String,
+
+    #[serde(rename = "functionCode")]
+    pub function_code: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct DayScheduleData {
+    #[serde(rename = "departments")]
+    pub departments: HashMap<u32, Department>,
+
+    #[serde(rename = "hourCodes")]
+    pub hour_codes: HashMap<u32, HourCode>,
+
+    #[serde(rename = "schedule")]
+    pub schedule: HashMap<String, Schedule>,
+
+    #[serde(rename = "employees")]
+    pub employees: HashMap<String, Employee>,
+
+    #[serde(rename = "nodes")]
+    pub nodes: HashMap<String, Node>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct DayScheduleResponseEntry {
+    #[serde(rename = "employee")]
+    pub employee: Employee,
+
+    #[serde(rename = "node")]
+    pub node: Node,
+
+    #[serde(rename = "department")]
+    pub department: Department,
+
+    #[serde(rename = "hour_code")]
+    pub hour_code: HourCode,
+
+    #[serde(rename = "start_time")]
+    pub start_time: u32,
+
+    #[serde(rename = "end_time")]
+    pub end_time: u32,
+
+    #[serde(rename = "total_time")]
+    pub total_time: f32,
+
+    #[serde(rename = "notes")]
+    pub notes: String,
 }

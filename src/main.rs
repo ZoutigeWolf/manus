@@ -1,12 +1,12 @@
 use dotenv::dotenv;
 use futures::stream::{FuturesUnordered, StreamExt};
 
-use axum::{routing::get, Extension, Router};
+use axum::{Extension, Router, routing::get};
 use std::{env, net::SocketAddr, sync::Arc};
 use tokio::{
     net::TcpListener,
     sync::RwLock,
-    time::{interval, Duration},
+    time::{Duration, interval},
 };
 
 mod date;
@@ -110,6 +110,7 @@ async fn start_webserver(accounts: Arc<RwLock<Vec<models::Account>>>) {
 
     let app = Router::new()
         .route("/{username}", get(server::get_calendar_for_user))
+        .route("/schedule", get(server::get_day_schedule))
         .layer(Extension(Arc::clone(&accounts)));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3069));

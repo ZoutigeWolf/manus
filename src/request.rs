@@ -1,5 +1,5 @@
+use crate::models::{DayScheduleData, ManusData, Me, Token};
 use reqwest::Client;
-use crate::models::{ManusData, Me, Token};
 
 pub async fn get_token(username: &String, password: &String) -> Result<Token, reqwest::Error> {
     let client = Client::new();
@@ -46,6 +46,20 @@ pub async fn get_manus_data(node_id: &String, employee_id: &String, year: &u32, 
         .send()
         .await?
         .json::<ManusData>()
+        .await?;
+
+    Ok(data)
+}
+
+pub async fn get_day_schedule(node_id: &String, day: &u32, month: &u32, year: &u32, token: &Token) -> Result<DayScheduleData, reqwest::Error> {
+    let client = Client::new();
+
+    let data = client
+        .get(format!("https://server.manus.plus/intergamma/api/node/{}/schedule/{}-{}-{}?departmentId=-1&scheduledOnly=false", node_id, year, month, day))
+        .bearer_auth(token.access_token.as_str())
+        .send()
+        .await?
+        .json::<DayScheduleData>()
         .await?;
 
     Ok(data)
